@@ -1,6 +1,7 @@
 package org.petstore.service;
 
 import com.org.petstore.endpoint.rest.model.Order;
+import jakarta.transaction.Transactional;
 import org.petstore.mapper.OrderMapper;
 import org.petstore.persistence.entity.PetOrder;
 import org.petstore.persistence.repository.OrderRepository;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class OrderService {
 
     private OrderRepository orderRepository;
