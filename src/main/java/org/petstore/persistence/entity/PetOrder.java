@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "PET_ORDER")
-public class Order implements Serializable {
+public class PetOrder implements Serializable {
 
     @Id
     @Column(name = "ID")
@@ -24,7 +25,7 @@ public class Order implements Serializable {
     private Integer quantity;
 
     @Column(name = "SHIP_DATE")
-    private String shipDate;
+    private OffsetDateTime shipDate;
 
     @Column(name = "STATUS")
     private String status;
