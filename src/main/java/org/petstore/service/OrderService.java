@@ -3,8 +3,10 @@ package org.petstore.service;
 import com.org.petstore.endpoint.rest.model.Order;
 import jakarta.transaction.Transactional;
 import org.petstore.mapper.OrderMapper;
+import org.petstore.persistence.entity.Pet;
 import org.petstore.persistence.entity.PetOrder;
 import org.petstore.persistence.repository.OrderRepository;
+import org.petstore.persistence.repository.PetRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -16,11 +18,13 @@ import java.util.Optional;
 public class OrderService {
 
     private OrderRepository orderRepository;
+    private PetRepository petRepository;
     private OrderMapper orderMapper;
 
-    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper){
+    public OrderService(OrderRepository orderRepository, OrderMapper orderMapper, PetRepository petRepository){
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
+        this.petRepository = petRepository;
     }
 
     public com.org.petstore.endpoint.rest.model.Order getOrderById(Long id){
@@ -39,7 +43,16 @@ public class OrderService {
         return orderIds;
     }
 
-    public Order createOrModifyOrder(Order body){
+    public Optional<Order> createOrder(Order body){
+        Optional<Pet> optionalPet = petRepository.findById(body.getPetId());
+        if(optionalPet.isEmpty()){
+            return Optional.empty();
+        }else{
+            return Optional.of(orderMapper.mapOrder(orderRepository.save(orderMapper.mapPetOrder(body))));
+        }
+    }
+
+    public Order modifyOrder(Order body){
         return orderMapper.mapOrder(orderRepository.save(orderMapper.mapPetOrder(body)));
     }
 
